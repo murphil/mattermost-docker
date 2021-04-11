@@ -21,6 +21,7 @@ services:
             MM_TEAMSETTINGS_SITENAME: Mattermost
             MM_SQLSETTINGS_DRIVERNAME: postgres
             MM_SQLSETTINGS_DATASOURCE: "postgres://mmuser:qwert123@db/mattermost?sslmode=disable\u0026connect_timeout=10"
+            MM_PLUGINSETTINGS_ENABLEUPLOADS: 'true'
         volumes:
             - ./volumes/app/mattermost/config:/opt/mattermost/config:rw
             - ./volumes/app/mattermost/data:/opt/mattermost/data:rw
