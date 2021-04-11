@@ -1,0 +1,31 @@
+version: '3'
+services:
+    db:
+        image: postgres:13
+        restart: always
+        environment:
+            PGCONF_SHARED_BUFFERS: 256MB
+            POSTGRES_USER: mmuser
+            POSTGRES_PASSWORD: qwert123
+            POSTGRES_DB: mattermost
+        volumes:
+            - ./volumes/db:/var/lib/postgresql/data:rw
+
+    mm:
+        image: nnurphy/mattermost
+        restart: always
+        links:
+            - db
+        environment:
+            MM_SERVICESETTINGS_SITEURL: http://localhost
+            MM_TEAMSETTINGS_SITENAME: Mattermost
+            MM_SQLSETTINGS_DRIVERNAME: postgres
+            MM_SQLSETTINGS_DATASOURCE: "postgres://mmuser:qwert123@db/mattermost?sslmode=disable\u0026connect_timeout=10"
+        volumes:
+            - ./volumes/app/mattermost/config:/opt/mattermost/config:rw
+            - ./volumes/app/mattermost/data:/opt/mattermost/data:rw
+            - ./volumes/app/mattermost/logs:/opt/mattermost/logs:rw
+            - ./volumes/app/mattermost/plugins:/opt/mattermost/plugins:rw
+            - ./volumes/app/mattermost/client-plugins:/opt/mattermost/client/plugins:rw
+        ports:
+            - 8065:8065
